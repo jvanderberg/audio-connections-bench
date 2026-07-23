@@ -111,7 +111,7 @@ def build() -> str:
             )
             cells.append(
                 f'<div class="cell" style="background:{CELL[score]}" '
-                f'title="{date}: {state}"><span>{score}</span></div>'
+                f'title="{date}: {state}"></div>'
             )
         bar_width = max(2, round(tokens / max_tokens * 190))
         cost_text = "–" if cost is None else (
@@ -162,8 +162,7 @@ def build() -> str:
   .name {{ font-size: 12.5px; white-space: nowrap; }}
   .reason {{ color: var(--ink2); font-size: 11.5px; white-space: nowrap; }}
   .cells {{ display: flex; gap: 6px; }}
-  .cell {{ width: 54px; height: 30px; border-radius: 4px; color: #fff;
-    display: grid; place-items: center; font-size: 12px; font-weight: 600; }}
+  .cell {{ width: 54px; height: 30px; border-radius: 4px; }}
   .cell.miss {{ background: transparent; box-shadow: inset 0 0 0 1px var(--hairline); }}
   .solved, .groups {{ font-variant-numeric: tabular-nums; font-size: 12.5px; text-align: right; }}
   .tok {{ display: flex; align-items: center; gap: 7px; }}
