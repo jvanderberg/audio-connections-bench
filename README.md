@@ -7,8 +7,8 @@ This is a **track-metadata benchmark**, not an audio-recognition benchmark. Each
 model sees the 16 artist/title pairs and must sort them into four groups of four.
 That isolates the Connections-style grouping problem from song recognition.
 
-![Audio Connections solve-rate grid for 24 models across seven daily puzzles](assets/results-light.png#gh-light-mode-only)
-![Audio Connections solve-rate grid for 24 models across seven daily puzzles](assets/results-dark.png#gh-dark-mode-only)
+![Audio Connections solve-rate grid for 24 models across seven daily puzzles](assets/results-light-v2.png#gh-light-mode-only)
+![Audio Connections solve-rate grid for 24 models across seven daily puzzles](assets/results-dark-v2.png#gh-dark-mode-only)
 
 ## Spoiler isolation
 
