@@ -7,6 +7,11 @@ This is a **track-metadata benchmark**, not an audio-recognition benchmark. Each
 model sees the 16 artist/title pairs and must sort them into four groups of four.
 That isolates the Connections-style grouping problem from song recognition.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/results-dark.png">
+  <img alt="Audio Connections pilot solve-rate grid for Claude Fable 5 and GPT-5.6 Sol across three daily puzzles" src="assets/results-light.png">
+</picture>
+
 ## Spoiler isolation
 
 Audio Connections publishes a JSON catalogue containing both clues and answers.
@@ -78,3 +83,6 @@ correct groups on each of its two misses.
 ```sh
 python3 -m unittest discover -s tests -v
 ```
+
+Regenerate the graphical report with `python3 viz.py`, then capture light and
+dark screenshots using the commands in `viz.py`'s module docstring.
