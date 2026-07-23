@@ -7,7 +7,7 @@ This is a **track-metadata benchmark**, not an audio-recognition benchmark. Each
 model sees the 16 artist/title pairs and must sort them into four groups of four.
 That isolates the Connections-style grouping problem from song recognition.
 
-![Audio Connections pilot solve-rate grid for Claude Fable 5 and GPT-5.6 Sol across three daily puzzles](assets/results-light.png)
+![Audio Connections solve-rate grid for 24 models across seven daily puzzles](assets/results-light.png)
 
 ## Spoiler isolation
 
@@ -63,17 +63,38 @@ Results append to `results/runs.jsonl`. Each record includes puzzle identity and
 fingerprint, model/runner, parse validity, exact and partial scores, token/cost/
 time data, the parsed guess, and raw model response.
 
-## Pilot results
+## Results (July 16–22, 2026)
 
-Three released puzzles, July 20–22, 2026:
-
-| model | effort | solved | average correct groups | average output tokens | average cost |
+| model | reasoning | solved | avg groups | avg out tokens | avg cost |
 |---|---|---:|---:|---:|---:|
-| Claude Fable 5 | CLI default | **3/3** | 4.00 | 2,003 | $0.048 |
-| GPT-5.6 Sol | high | 1/3 | 2.67 | 1,033 | subscription |
+| Gemini 3.6 Flash | default | **6/7** | 3.71 | 4,861 | $0.037 |
+| Gemini 3.5 Flash | default | **6/7** | 3.71 | 5,450 | $0.049 |
+| Gemini 3.1 Pro | default | **6/7** | 3.71 | 9,764 | $0.12 |
+| Gemini 2.5 Pro | default | **6/7** | 3.57 | 6,649 | $0.067 |
+| GPT-5.5 (codex) | default | **5/7** | 3.43 | 1,483 | – |
+| Claude Fable 5 | high | **5/7** | 3.43 | 2,920 | $0.28 |
+| Claude Opus 4.8 | high | **5/7** | 3.43 | 3,797 | $0.15 |
+| GPT-5.6 Terra | high | **5/7** | 3.29 | 6,699 | – |
+| Kimi K3 | max | **5/7** | 3.14 | 32,161 | $0.48 |
+| GPT-5.6 Sol | high | **4/7** | 3.14 | 1,828 | – |
+| Claude Sonnet 5 | high | **4/7** | 3.14 | 6,294 | $0.16 |
+| GPT-5.6 Luna | high | **4/7** | 3.14 | 11,564 | – |
+| Claude Opus 4.5 | high | **4/7** | 3.14 | 13,186 | $0.41 |
+| Claude Sonnet 4.5 | high | **3/7** | 2.86 | 4,060 | $0.11 |
+| GLM-5.2 | default | **3/7** | 2.43 | 35,124 | $0.13 |
+| DeepSeek V4 Pro | default | **2/7** | 1.86 | 11,976 | $0.022 |
+| Kimi K2.6 | default | **2/7** | 1.14 | 41,703 | $0.13 |
+| GPT-5.4 mini | default | **1/7** | 2.00 | 10,722 | – |
+| DeepSeek V4 Flash | default | **1/7** | 1.86 | 12,459 | $0.003 |
+| Gemini 3.5 Flash Lite | default | **1/7** | 1.14 | 128 | $0.000 |
+| MiniMax M3 | default | **1/7** | 1.14 | 36,366 | $0.052 |
+| Qwen3.6 35B A3B | default | **1/7** | 0.86 | 44,402 | $0.044 |
+| Claude Haiku 4.5 | high | **0/7** | 1.29 | 9,278 | $0.061 |
+| GPT-4.1 mini | none | **0/7** | 0.86 | 109 | – |
 
-All six attempts returned valid four-by-four JSON groupings. Sol found two
-correct groups on each of its two misses.
+No model swept the week. Four Gemini models tied at 6/7; Gemini 3.6 Flash was
+the cheapest and most token-efficient of them. Puzzle difficulty varied sharply:
+July 19 was solved by 18/24 models, while July 21 was solved by only 4/24.
 
 ## Test
 

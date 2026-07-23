@@ -2,8 +2,8 @@
 """Render results/runs.jsonl into the README report (viz.html).
 
 Screenshot with:
-  npx playwright screenshot --viewport-size "1140,305" --color-scheme light viz.html assets/results-light.png
-  npx playwright screenshot --viewport-size "1140,305" --color-scheme dark viz.html assets/results-dark.png
+  npx playwright screenshot --viewport-size "1140,1220" --color-scheme light viz.html assets/results-light.png
+  npx playwright screenshot --viewport-size "1140,1220" --color-scheme dark viz.html assets/results-dark.png
 """
 
 import json
@@ -20,14 +20,42 @@ CELL = {0: "#86b6ef", 1: "#5598e7", 2: "#2a78d6", 3: "#256abf", 4: "#184f95"}
 BAR = "#1baf7a"
 
 LABELS = {
+    "claude:claude-fable-5@high": "Claude Fable 5",
     "claude:claude-fable-5": "Claude Fable 5",
+    "claude:claude-opus-4-8@high": "Claude Opus 4.8",
+    "claude:claude-opus-4-5@high": "Claude Opus 4.5",
+    "claude:claude-sonnet-5@high": "Claude Sonnet 5",
+    "claude:claude-sonnet-4-5@high": "Claude Sonnet 4.5",
+    "claude:claude-haiku-4-5@high": "Claude Haiku 4.5",
+    "codex": "GPT-5.5 (codex)",
     "codex:gpt-5.6-sol@high": "GPT-5.6 Sol",
+    "codex:gpt-5.6-terra@high": "GPT-5.6 Terra",
+    "codex:gpt-5.6-luna@high": "GPT-5.6 Luna",
+    "codex:gpt-5.4-mini": "GPT-5.4 mini",
+    "codex-api:gpt-4.1-mini": "GPT-4.1 mini",
+    "openrouter:deepseek/deepseek-v4-pro": "DeepSeek V4 Pro",
+    "openrouter:deepseek/deepseek-v4-flash": "DeepSeek V4 Flash",
+    "openrouter:moonshotai/kimi-k2.6": "Kimi K2.6",
+    "openrouter:moonshotai/kimi-k3": "Kimi K3",
+    "openrouter:z-ai/glm-5.2": "GLM-5.2",
+    "openrouter:minimax/minimax-m3": "MiniMax M3",
+    "openrouter:qwen/qwen3.6-35b-a3b": "Qwen3.6 35B A3B",
+    "openrouter:google/gemini-3.1-pro-preview": "Gemini 3.1 Pro",
+    "openrouter:google/gemini-3.5-flash": "Gemini 3.5 Flash",
+    "openrouter:google/gemini-2.5-pro": "Gemini 2.5 Pro",
+    "openrouter:google/gemini-3.6-flash": "Gemini 3.6 Flash",
+    "openrouter:google/gemini-3.5-flash-lite": "Gemini 3.5 Flash Lite",
+}
+
+IMPLICIT_EFFORT = {
+    "codex-api:gpt-4.1-mini": "none",
+    "openrouter:moonshotai/kimi-k3": "max",
 }
 
 
 def effort_label(spec: str) -> str:
     _, _, effort = parse_model_spec(spec)
-    return effort or "default"
+    return effort or IMPLICIT_EFFORT.get(spec, "default")
 
 
 def load_runs() -> list[dict]:
@@ -46,7 +74,11 @@ def build() -> str:
         raise RuntimeError("no current-prompt results to visualize")
 
     dates = sorted({date for date, _ in latest})
-    models = sorted({model for _, model in latest})
+    roster = {
+        line.strip() for line in (ROOT / "models.txt").read_text().splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+    models = sorted({model for _, model in latest if model in roster})
     stats = []
     for model in models:
         runs = [latest[(date, model)] for date in dates if (date, model) in latest]
@@ -121,8 +153,8 @@ def build() -> str:
   h1 {{ font-size: 17px; margin: 0 0 2px; font-weight: 600; }}
   .sub {{ color: var(--ink2); font-size: 12.5px; margin-bottom: 18px; }}
   .row, .hdr {{ display: grid;
-    grid-template-columns: 160px 64px 188px 52px 72px 246px 58px;
-    gap: 14px; align-items: center; padding: 6px 0; }}
+    grid-template-columns: 150px 60px 414px 46px 58px 210px 54px;
+    gap: 10px; align-items: center; padding: 6px 0; }}
   .hdr {{ color: var(--muted); font-size: 11px; border-bottom: 1px solid var(--hairline);
     padding-bottom: 7px; margin-bottom: 4px; }}
   .hdr .days {{ display: flex; gap: 6px; }}

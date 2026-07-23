@@ -22,6 +22,7 @@ import json
 import os
 import random
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -250,8 +251,11 @@ def run_openrouter(prompt: str, model: str | None, effort: str | None,
         raise RuntimeError(f"openrouter error: {data['error']}")
     usage = data.get("usage", {})
     details = usage.get("completion_tokens_details") or {}
+    response_text = data["choices"][0]["message"].get("content") or ""
+    if not response_text and not usage.get("completion_tokens"):
+        raise RuntimeError("openrouter returned an empty zero-token completion")
     return {
-        "text": data["choices"][0]["message"].get("content") or "",
+        "text": response_text,
         "tokens_in": usage.get("prompt_tokens", 0),
         "tokens_in_cached": (usage.get("prompt_tokens_details") or {}).get(
             "cached_tokens", 0
@@ -265,8 +269,13 @@ def run_openrouter(prompt: str, model: str | None, effort: str | None,
 
 def run_claude(prompt: str, model: str | None, effort: str | None,
                timeout: int) -> dict:
+    override = os.environ.get("CLAUDE_BIN")
+    native = Path.home() / ".local" / "bin" / "claude"
+    claude_bin = override or (str(native) if native.exists() else shutil.which("claude"))
+    if not claude_bin:
+        raise RuntimeError("claude executable not found")
     cmd = [
-        "claude", "-p", prompt,
+        claude_bin, "-p", prompt,
         "--output-format", "json",
         "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}',
         "--setting-sources", "",
@@ -275,7 +284,7 @@ def run_claude(prompt: str, model: str | None, effort: str | None,
         cmd += ["--model", model]
     if effort:
         help_text = subprocess.run(
-            ["claude", "--help"], capture_output=True, text=True, timeout=10
+            [claude_bin, "--help"], capture_output=True, text=True, timeout=10
         ).stdout
         if "--effort" not in help_text:
             raise RuntimeError(
@@ -300,6 +309,23 @@ def run_claude(prompt: str, model: str | None, effort: str | None,
     data = json.loads(proc.stdout)
     usage = data.get("usage", {})
     model_usage = data.get("modelUsage", {})
+    if (not usage or not any(usage.get(key) for key in (
+            "input_tokens", "cache_creation_input_tokens",
+            "cache_read_input_tokens", "output_tokens"))) and model_usage:
+        # Some long Claude runs omit the aggregate usage object while retaining
+        # complete per-model accounting. Reconstruct the same fields so valid
+        # solves do not appear as zero-token responses in the report.
+        usage = {
+            "input_tokens": sum(item.get("inputTokens", 0)
+                                for item in model_usage.values()),
+            "cache_creation_input_tokens": sum(
+                item.get("cacheCreationInputTokens", 0)
+                for item in model_usage.values()),
+            "cache_read_input_tokens": sum(item.get("cacheReadInputTokens", 0)
+                                            for item in model_usage.values()),
+            "output_tokens": sum(item.get("outputTokens", 0)
+                                 for item in model_usage.values()),
+        }
     model_used = max(
         model_usage.items(),
         key=lambda pair: pair[1].get("outputTokens", 0),
