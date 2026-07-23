@@ -265,14 +265,36 @@ def run_openrouter(prompt: str, model: str | None, effort: str | None,
 
 def run_claude(prompt: str, model: str | None, effort: str | None,
                timeout: int) -> dict:
-    cmd = ["claude", "-p", "--tools", "", "--output-format", "json"]
+    cmd = [
+        "claude", "-p", prompt,
+        "--output-format", "json",
+        "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}',
+        "--setting-sources", "",
+    ]
     if model:
         cmd += ["--model", model]
     if effort:
+        help_text = subprocess.run(
+            ["claude", "--help"], capture_output=True, text=True, timeout=10
+        ).stdout
+        if "--effort" not in help_text:
+            raise RuntimeError(
+                "this Claude CLI does not support @effort; omit it or update Claude Code"
+            )
         cmd += ["--effort", effort]
-    proc = subprocess.run(
-        cmd, input=prompt, capture_output=True, text=True, timeout=timeout
-    )
+    # --disallowedTools consumes all remaining arguments in Claude Code 2.0.9,
+    # so it must be last. Pair that deny-list with an empty working directory,
+    # empty settings sources, and an empty strict MCP config: the model gets the
+    # prompt and nothing answer-bearing from the benchmark checkout.
+    cmd += [
+        "--disallowedTools",
+        "Bash,Read,Glob,Grep,WebFetch,WebSearch,Task,Edit,Write,NotebookEdit",
+    ]
+    with tempfile.TemporaryDirectory(prefix="audio-connections-attempt-") as cwd:
+        proc = subprocess.run(
+            cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True,
+            timeout=timeout, cwd=cwd,
+        )
     if proc.returncode != 0:
         raise RuntimeError(f"claude exited {proc.returncode}: {proc.stderr[:500]}")
     data = json.loads(proc.stdout)

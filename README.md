@@ -38,7 +38,9 @@ those notes in the game.
 
 Runner specs are `runner[:model][@effort]`:
 
-- `claude:<model>[@effort]` uses Claude Code with tools disabled.
+- `claude:<model>[@effort]` uses Claude Code with tools disabled. `@effort`
+  requires a Claude Code release whose CLI exposes `--effort`; omit it on older
+  releases such as 2.0.9.
 - `codex[:<model>][@effort]` uses the Codex CLI and ChatGPT account.
 - `codex-api:<model>[@effort]` uses an isolated API-key Codex home.
 - `openrouter:<model-id>[@effort]` uses OpenRouter chat completions.
@@ -58,6 +60,18 @@ contains them. `--allow-unreleased` is an explicit spoiler override.
 Results append to `results/runs.jsonl`. Each record includes puzzle identity and
 fingerprint, model/runner, parse validity, exact and partial scores, token/cost/
 time data, the parsed guess, and raw model response.
+
+## Pilot results
+
+Three released puzzles, July 20–22, 2026:
+
+| model | effort | solved | average correct groups | average output tokens | average cost |
+|---|---|---:|---:|---:|---:|
+| Claude Fable 5 | CLI default | **3/3** | 4.00 | 2,003 | $0.048 |
+| GPT-5.6 Sol | high | 1/3 | 2.67 | 1,033 | subscription |
+
+All six attempts returned valid four-by-four JSON groupings. Sol found two
+correct groups on each of its two misses.
 
 ## Test
 
