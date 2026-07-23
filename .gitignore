@@ -1,0 +1,6 @@
+.env
+.codex-api/
+__pycache__/
+*.pyc
+.DS_Store
+catalog/
