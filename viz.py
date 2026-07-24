@@ -2,8 +2,8 @@
 """Render results/runs.jsonl into the README report (viz.html).
 
 Screenshot with:
-  npx playwright screenshot --viewport-size "1140,1260" --color-scheme light viz.html assets/results-light-v2.png
-  npx playwright screenshot --viewport-size "1140,1260" --color-scheme dark viz.html assets/results-dark-v2.png
+  npx playwright screenshot --viewport-size "1140,1260" --color-scheme light viz.html assets/results-light-v3.png
+  npx playwright screenshot --viewport-size "1140,1260" --color-scheme dark viz.html assets/results-dark-v3.png
 """
 
 import json
