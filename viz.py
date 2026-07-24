@@ -2,8 +2,8 @@
 """Render results/runs.jsonl into the README report (viz.html).
 
 Screenshot with:
-  npx playwright screenshot --viewport-size "1140,1220" --color-scheme light viz.html assets/results-light-v2.png
-  npx playwright screenshot --viewport-size "1140,1220" --color-scheme dark viz.html assets/results-dark-v2.png
+  npx playwright screenshot --viewport-size "1140,1260" --color-scheme light viz.html assets/results-light-v2.png
+  npx playwright screenshot --viewport-size "1140,1260" --color-scheme dark viz.html assets/results-dark-v2.png
 """
 
 import json
@@ -22,6 +22,7 @@ BAR = "#1baf7a"
 LABELS = {
     "claude:claude-fable-5@high": "Claude Fable 5",
     "claude:claude-fable-5": "Claude Fable 5",
+    "claude:claude-opus-5@high": "Claude Opus 5",
     "claude:claude-opus-4-8@high": "Claude Opus 4.8",
     "claude:claude-opus-4-5@high": "Claude Opus 4.5",
     "claude:claude-sonnet-5@high": "Claude Sonnet 5",

@@ -7,8 +7,8 @@ This is a **track-metadata benchmark**, not an audio-recognition benchmark. Each
 model sees the 16 artist/title pairs and must sort them into four groups of four.
 That isolates the Connections-style grouping problem from song recognition.
 
-![Audio Connections solve-rate grid for 24 models across seven daily puzzles](assets/results-light-v2.png#gh-light-mode-only)
-![Audio Connections solve-rate grid for 24 models across seven daily puzzles](assets/results-dark-v2.png#gh-dark-mode-only)
+![Audio Connections solve-rate grid for 25 models across seven daily puzzles](assets/results-light-v2.png#gh-light-mode-only)
+![Audio Connections solve-rate grid for 25 models across seven daily puzzles](assets/results-dark-v2.png#gh-dark-mode-only)
 
 ## Spoiler isolation
 
@@ -68,6 +68,7 @@ time data, the parsed guess, and raw model response.
 
 | model | reasoning | solved | avg groups | avg out tokens | avg cost |
 |---|---|---:|---:|---:|---:|
+| Claude Opus 5 | high | **6/7** | 3.71 | 2,051 | $0.11 |
 | Gemini 3.6 Flash | default | **6/7** | 3.71 | 4,861 | $0.037 |
 | Gemini 3.5 Flash | default | **6/7** | 3.71 | 5,450 | $0.049 |
 | Gemini 3.1 Pro | default | **6/7** | 3.71 | 9,764 | $0.12 |
@@ -93,9 +94,10 @@ time data, the parsed guess, and raw model response.
 | Claude Haiku 4.5 | high | **0/7** | 1.29 | 9,278 | $0.061 |
 | GPT-4.1 mini | none | **0/7** | 0.86 | 109 | – |
 
-No model swept the week. Four Gemini models tied at 6/7; Gemini 3.6 Flash was
-the cheapest and most token-efficient of them. Puzzle difficulty varied sharply:
-July 19 was solved by 18/24 models, while July 21 was solved by only 4/24.
+No model swept the week. Claude Opus 5 and four Gemini models tied at 6/7;
+Claude Opus 5 used the fewest output tokens of them, while Gemini 3.6 Flash was
+the cheapest. Puzzle difficulty varied sharply: July 19 was solved by 19/25
+models, while July 21 was solved by only 5/25.
 
 ## Test
 
